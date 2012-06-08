@@ -6,7 +6,7 @@ class Pomodoro:
 	_form = None
 	_master = None
 	_reloj = None
-	_timeLabel = "25:00"
+	_timeLabel = "01:00"
 	_timeout = 1
 
 	def __init__(self):
@@ -20,7 +20,7 @@ class Pomodoro:
 
 		self._reloj = Label(self._form, text=self._timeLabel)
 
-		startButton = Button(self._form, text="Iniciar Pomodoro", command=self.startPomodoro())
+		startButton = Button(self._form, text="Iniciar Pomodoro", command=self.startPomodoro)
 
 		title.pack()
 		self._reloj.pack()
@@ -48,8 +48,12 @@ class Pomodoro:
 		
 		self._reloj.config(text=self._timeLabel)
 		self._reloj.update_idletasks()
-		_t = Timer(1.0, self.discountTime)
-		_t.start()
+		if self._timeLabel == '00:00':
+			print 'Finzalizado!!!'
+		else:
+			_t = Timer(1.0, self.discountTime)
+			_t.start()
+		
 
 	def startPomodoro(self):
 		_t = Timer(1.0, self.discountTime)
