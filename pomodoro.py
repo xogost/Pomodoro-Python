@@ -8,24 +8,51 @@ class Pomodoro:
 	_reloj = None
 	_timeLabel = "01:00"
 	_timeout = 1
+	_menu = None
+	_tkmenu = None
+	_root = None
 
 	def __init__(self):
 		self.startApp(self._master)
 
 	def startApp(self, master):
-		self._form = Frame(master)
+		self._root = Tk()
+
+		#set title to form
+		title = Label(self._form, text="Pomodoro by Xogost!")
+		title.pack()
+		#create label for time of pomodoro
+		self._reloj = Label(self._form, text=self._timeLabel)
+		self._reloj.pack()
+		#create button for start pomodoro
+		startButton = Button(self._form, text="Iniciar Pomodoro", command=self.startPomodoro)
+		startButton.pack()
+		
+		self._menu = Menu(self._root)
+
+		filemenu = Menu(self._menu, tearoff=0)
+		acercade = Menu(self._menu, tearoff=0)
+
+		filemenu.add_command(label="Aplicacion", command=self.hola)
+		filemenu.add_separator()
+		filemenu.add_command(label="Notificaciones y alertas", command=self.hola)
+
+		acercade.add_command(label="Aplicacion", command=self.hola)
+		acercade.add_separator()
+		acercade.add_command(label="Desarrollador", command=self.hola)
+
+		self._menu.add_cascade(label="Configuracion", menu=filemenu)		
+		self._menu.add_cascade(label="Acerda de", menu=acercade)
+
+		self._root.config(menu=self._menu)
+		
+		self._form = Frame(self._root, width=500, height=200)
 		self._form.pack()
 
-		title = Label(self._form, text="Pomodoro by Xogost!")
+		self.center_window()
 
-		self._reloj = Label(self._form, text=self._timeLabel)
+		self._root.mainloop()
 
-		startButton = Button(self._form, text="Iniciar Pomodoro", command=self.startPomodoro)
-
-		title.pack()
-		self._reloj.pack()
-		startButton.pack()
-		self._form.mainloop()
 
 	def discountTime(self):
 		runtime = self._timeLabel.split(':')
@@ -53,8 +80,18 @@ class Pomodoro:
 		else:
 			_t = Timer(1.0, self.discountTime)
 			_t.start()
-		
+	
+	def center_window(self,w=300, h=200):
+	    # get screen width and height
+	    ws = self._root.winfo_screenwidth()
+	    hs = self._root.winfo_screenheight()
+	    # calculate position x, y
+	    x = (ws/2) - (w/2)    
+	    y = (hs/2) - (h/2)
+	    self._root.geometry('%dx%d+%d+%d' % (w, h, x, y))	
 
 	def startPomodoro(self):
 		_t = Timer(1.0, self.discountTime)
 		_t.start()
+	def hola(self):
+		print 'hola'
