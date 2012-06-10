@@ -11,6 +11,8 @@ class Pomodoro:
 	_menu = None
 	_tkmenu = None
 	_root = None
+	_stop = False
+	_startButton = None
 
 	def __init__(self):
 		self.startApp(self._master)
@@ -18,15 +20,21 @@ class Pomodoro:
 	def startApp(self, master):
 		self._root = Tk()
 
+		self._root.title('Pomodoro by Xogost!!!')
+		#self._root.iconbitmap( bitmap=None, default='pomodoro.ico')
+
 		#set title to form
-		title = Label(self._form, text="Pomodoro by Xogost!")
+		title = Label(self._form, text="Pomodoro")
 		title.pack()
 		#create label for time of pomodoro
 		self._reloj = Label(self._form, text=self._timeLabel)
 		self._reloj.pack()
 		#create button for start pomodoro
-		startButton = Button(self._form, text="Iniciar Pomodoro", command=self.startPomodoro)
-		startButton.pack()
+		self._startButton = Button(self._form, text="Iniciar Pomodoro", command=self.startPomodoro)
+		self._startButton.pack()
+		#create button for stop pomodoro
+		stopButton = Button(self._form, text="Parar Pomodoro", command=self.stopPomodoro)
+		stopButton.pack()
 		
 		self._menu = Menu(self._root)
 
@@ -34,11 +42,9 @@ class Pomodoro:
 		acercade = Menu(self._menu, tearoff=0)
 
 		filemenu.add_command(label="Aplicacion", command=self.hola)
-		filemenu.add_separator()
 		filemenu.add_command(label="Notificaciones y alertas", command=self.hola)
 
 		acercade.add_command(label="Aplicacion", command=self.hola)
-		acercade.add_separator()
 		acercade.add_command(label="Desarrollador", command=self.hola)
 
 		self._menu.add_cascade(label="Configuracion", menu=filemenu)		
@@ -75,11 +81,13 @@ class Pomodoro:
 		
 		self._reloj.config(text=self._timeLabel)
 		self._reloj.update_idletasks()
-		if self._timeLabel == '00:00':
-			print 'Finzalizado!!!'
-		else:
-			_t = Timer(1.0, self.discountTime)
-			_t.start()
+		if self._stop == False:			
+			if self._timeLabel == '00:00':
+				print 'Finzalizado!!!'
+				self.modalPausa()
+			else:
+				_t = Timer(1.0, self.discountTime)
+				_t.start()
 	
 	def center_window(self,w=300, h=200):
 	    # get screen width and height
@@ -91,7 +99,31 @@ class Pomodoro:
 	    self._root.geometry('%dx%d+%d+%d' % (w, h, x, y))	
 
 	def startPomodoro(self):
-		_t = Timer(1.0, self.discountTime)
-		_t.start()
+		self._stop = False
+		self._t = Timer(1.0, self.discountTime)
+		self._t.start()
+
+	def stopPomodoro(self):
+		self._startButton.config(text="Reanudar Pomodoro")
+		self._stop = True
+
+	def modalPausa(self):
+		modalpausa = Tk()
+		#set title to form
+		title = Label(modalpausa, text="Has una Pausa!!!")
+		title.pack()
+		#create label for time of pomodoro
+		labelpausa = Label(self._form, text=self._timeLabel)
+		labelpausa.pack()
+		#create button for start pomodoro
+		startpausa = Button(modalpausa, text="Iniciar Pausa", command=self.pausa)
+		startpausa.pack()
+
+		modalpausa.mainloop()
+
+	def pausa(self):
+		self._timeLabel = "05:00"
+		self.discountTime()
+
 	def hola(self):
 		print 'hola'
