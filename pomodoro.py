@@ -1,5 +1,6 @@
 from Tkinter import *
-from threading import * 
+from threading import *
+from gtalkAdministrator import *
 
 class Pomodoro:
 	_t = None
@@ -13,6 +14,7 @@ class Pomodoro:
 	_root = None
 	_stop = False
 	_startButton = None
+	_gtalk = gtalkAdministrator()
 
 	def __init__(self):
 		self.startApp(self._master)
@@ -64,11 +66,15 @@ class Pomodoro:
 		runtime = self._timeLabel.split(':')
 		if runtime[1] == "00":
 			runtime[0] = int(runtime[0]) - 1
+			if runtime[0] != 0:
+				self._gtalk.setState('En Pomodoro Tiempo Restante: %s Minutos' % (runtime[0]))
 			runtime[1] = 59
 		elif int(runtime[0]) == 0 and int(runtime[1]) == 0:
 			self._timeout = 0
 		else:
 			runtime[1] = int(runtime[1]) - 1
+			if int(runtime[0]) == 0:
+				self._gtalk.setState('En Pomodoro Tiempo Restante: %s Segundos' % (runtime[1]))
 
 		if int(runtime[1]) < 10 and int(runtime[0]) < 10:
 			self._timeLabel = "0%d:0%d" % (int(runtime[0]), int(runtime[1]))
