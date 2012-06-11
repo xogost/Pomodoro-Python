@@ -7,7 +7,7 @@ class Pomodoro:
 	_form = None
 	_master = None
 	_reloj = None
-	_timeLabel = "01:00"
+	_timeLabel = "25:00"
 	_timeout = 1
 	_menu = None
 	_tkmenu = None
@@ -15,6 +15,7 @@ class Pomodoro:
 	_stop = False
 	_startButton = None
 	_gtalk = gtalkAdministrator()
+	_action = 'Pomodoro'
 
 	def __init__(self):
 		self.startApp(self._master)
@@ -67,14 +68,14 @@ class Pomodoro:
 		if runtime[1] == "00":
 			runtime[0] = int(runtime[0]) - 1
 			if runtime[0] != 0:
-				self._gtalk.setState('En Pomodoro Tiempo Restante: %s Minutos' % (runtime[0]))
+				self._gtalk.setState('En %s Tiempo Restante: %s Minutos' % (self._action, runtime[0]))
 			runtime[1] = 59
 		elif int(runtime[0]) == 0 and int(runtime[1]) == 0:
 			self._timeout = 0
 		else:
 			runtime[1] = int(runtime[1]) - 1
 			if int(runtime[0]) == 0:
-				self._gtalk.setState('En Pomodoro Tiempo Restante: %s Segundos' % (runtime[1]))
+				self._gtalk.setState('En %s Tiempo Restante: %s Segundos' % (self._action,runtime[1]))
 
 		if int(runtime[1]) < 10 and int(runtime[0]) < 10:
 			self._timeLabel = "0%d:0%d" % (int(runtime[0]), int(runtime[1]))
@@ -92,8 +93,8 @@ class Pomodoro:
 				print 'Finzalizado!!!'
 				self.modalPausa()
 			else:
-				_t = Timer(1.0, self.discountTime)
-				_t.start()
+				self._t = Timer(1.0, self.discountTime)
+				self._t.start()
 	
 	def center_window(self,w=300, h=200):
 	    # get screen width and height
@@ -105,6 +106,8 @@ class Pomodoro:
 	    self._root.geometry('%dx%d+%d+%d' % (w, h, x, y))	
 
 	def startPomodoro(self):
+		self._action = 'Pomodoro'
+		self._timeLabel = "25:00"
 		self._stop = False
 		self._t = Timer(1.0, self.discountTime)
 		self._t.start()
@@ -128,6 +131,7 @@ class Pomodoro:
 		modalpausa.mainloop()
 
 	def pausa(self):
+		self._action = 'Pausa'
 		self._timeLabel = "05:00"
 		self.discountTime()
 
