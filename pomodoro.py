@@ -44,11 +44,11 @@ class Pomodoro:
 		filemenu = Menu(self._menu, tearoff=0)
 		acercade = Menu(self._menu, tearoff=0)
 
-		filemenu.add_command(label="Aplicacion", command=self.hola)
-		filemenu.add_command(label="Notificaciones y alertas", command=self.hola)
+		#filemenu.add_command(label="Aplicacion", command=self.hola)
+		#filemenu.add_command(label="Notificaciones y alertas", command=self.hola)
 
-		acercade.add_command(label="Aplicacion", command=self.hola)
-		acercade.add_command(label="Desarrollador", command=self.hola)
+		#acercade.add_command(label="Aplicacion", command=self.hola)
+		#acercade.add_command(label="Desarrollador", command=self.hola)
 
 		self._menu.add_cascade(label="Configuracion", menu=filemenu)		
 		self._menu.add_cascade(label="Acerda de", menu=acercade)
@@ -74,8 +74,6 @@ class Pomodoro:
 			self._timeout = 0
 		else:
 			runtime[1] = int(runtime[1]) - 1
-			if int(runtime[0]) == 0:
-				self._gtalk.setState('En %s Tiempo Restante: %s Segundos' % (self._action,runtime[1]))
 
 		if int(runtime[1]) < 10 and int(runtime[0]) < 10:
 			self._timeLabel = "0%d:0%d" % (int(runtime[0]), int(runtime[1]))
@@ -122,7 +120,7 @@ class Pomodoro:
 		title = Label(modalpausa, text="Has una Pausa!!!")
 		title.pack()
 		#create label for time of pomodoro
-		labelpausa = Label(self._form, text=self._timeLabel)
+		#labelpausa = Label(self._form, text=self._timeLabel)
 		labelpausa.pack()
 		#create button for start pomodoro
 		startpausa = Button(modalpausa, text="Iniciar Pausa", command=self.pausa)
@@ -134,6 +132,3 @@ class Pomodoro:
 		self._action = 'Pausa'
 		self._timeLabel = "05:00"
 		self.discountTime()
-
-	def hola(self):
-		print 'hola'
